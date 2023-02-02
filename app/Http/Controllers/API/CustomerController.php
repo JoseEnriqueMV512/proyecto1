@@ -10,6 +10,16 @@ use Illuminate\Http\Request;
 class CustomerController extends Controller
 {
     /**
+     * Create the controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Customer::class, 'customer');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -23,6 +33,7 @@ class CustomerController extends Controller
             ($busqueda && array_key_exists('q', $busqueda))
             ? Customer::where('first_name', 'like', '%' . $busqueda['q'] . '%')
                 ->pagina($numElementos)
+                ->paginate($numElementos)
             : Customer::paginate($numElementos);
 
             return CustomerResource::collection($registrosCustomers);
